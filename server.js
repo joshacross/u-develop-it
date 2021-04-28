@@ -35,7 +35,7 @@ const db = mysql.createConnection(
 
 
 // Get all the data in the candidates table
-app.get('/api/candidates', (req, res) => {
+app.get('/api/candidate', (req, res) => {
     const sql = `SELECT * FROM candidates`;
 
     db.query(sql, (err, rows) => {
@@ -81,12 +81,29 @@ app.get('/api/candidate/:id', (req, res) => {
 //     console.log(row);
 // });
 
-// //Route to handle user requests that are not supported by the app
-// app.use((req, res) => {
-//     res.status(404).end();
-// });
+// Delete a candidate
+app.delete('/api/candidate/:id', (req, res) => {
+    const sql = `DELETE FROM candidates WHERE id = ?`;
+    const params = [req.params.id];
 
-// // Delete a candidate
+    db.query(sql, params, (err, result) => {
+        if (err) {
+            res.statusMessage(400).json({ error: res.message });
+        } else if (!result.affectedRows) {
+            res.json({
+                message: 'Candidate not found'
+            });
+        } else {
+            res.json({
+                message: 'deleted',
+                changes: result.affectedRows,
+                id: req.params.id
+            });
+        }
+    });
+});
+
+// // <-- TEST script to Delete a candidate -->
 // db.query(`DELETE FROM candidates WHERE id = ?`, 1, (err, result) => {
 //     if (err) {
 //         console.log(err);
@@ -105,6 +122,11 @@ app.get('/api/candidate/:id', (req, res) => {
 //     }
 //     console.log(result);
 // });
+
+//Route to handle user requests that are not supported by the app
+app.use((req, res) => {
+    res.status(404).end();
+});
 
 
 // function to start Express.js server on port 3001
