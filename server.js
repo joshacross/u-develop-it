@@ -33,15 +33,47 @@ const db = mysql.createConnection(
     console.log('Connected to the election database.')
 );
 
+/*
 // Return all the data in the candidates table
+// Runs a DB Query and executes callback with resulting rows that match the query
 db.query(`SELECT * FROM candidates`, (err, rows) => {
     console.log(rows);
 })
+*/
 
-//Route to handle user requests that are not supported by the app
-app.use((req, res) => {
-    res.status(404).end();
-});
+
+// // GET a single candidate
+// db.query(`SELECT * FROM candidates WHERE id = 1`, (err, row) => {
+//     if (err) {
+//         console.log(err);
+//     }
+//     console.log(row);
+// });
+
+// //Route to handle user requests that are not supported by the app
+// app.use((req, res) => {
+//     res.status(404).end();
+// });
+
+// // Delete a candidate
+// db.query(`DELETE FROM candidates WHERE id = ?`, 1, (err, result) => {
+//     if (err) {
+//         console.log(err);
+//     }
+//     console.log(result);
+// });
+
+// // Create a candidate
+// const sql = `INSERT INTO candidates (id, first_name, last_name, industry_connected)
+//             VALUES (?,?,?,?)`;
+// const params = [1, 'Ronald', 'Firbank', 1];
+
+// db. query(sql, params, (err, result) => {
+//     if (err) {
+//         console.log(err);
+//     }
+//     console.log(result);
+// });
 
 
 // function to start Express.js server on port 3001
