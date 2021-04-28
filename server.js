@@ -5,6 +5,9 @@ const express = require('express');
 const PORT = process.env.PORT || 3001;
 const app = express();
 
+// import inputCheck module
+const inputCheck = require('./utils/inputCheck');
+
 // express middleware
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -35,7 +38,7 @@ const db = mysql.createConnection(
 
 
 // Get all the data in the candidates table
-app.get('/api/candidate', (req, res) => {
+app.get('/api/candidates', (req, res) => {
     const sql = `SELECT * FROM candidates`;
 
     db.query(sql, (err, rows) => {
@@ -57,7 +60,7 @@ app.get('/api/candidate', (req, res) => {
 
 
 // GET a single candidate
-app.get('/api/candidate/:id', (req, res) => {
+app.get('/api/candidates/:id', (req, res) => {
     const sql = `SELECT * FROM candidates WHERE id = ?`;
     const params = [req.params.id];
 
@@ -82,7 +85,7 @@ app.get('/api/candidate/:id', (req, res) => {
 // });
 
 // Delete a candidate
-app.delete('/api/candidate/:id', (req, res) => {
+app.delete('/api/candidates/:id', (req, res) => {
     const sql = `DELETE FROM candidates WHERE id = ?`;
     const params = [req.params.id];
 
@@ -111,7 +114,30 @@ app.delete('/api/candidate/:id', (req, res) => {
 //     console.log(result);
 // });
 
-// // Create a candidate
+// Create a candidate
+app.post('/api/candidates', ({ body }, res) => {
+    const errors = inputCheck(body, 'first_name', 'last_name', 'industry_connected');
+    if (errors) {
+        res.status(400).json({ error: errors});
+        return;
+    }
+    const sql = `INSERT INTO candidates (first_name, last_name, industry_connected)
+                VALUES (?, ?, ?)`;
+    const params = [body.first_name, body.last_name, body.industry_connected];
+
+    db.query(sql, params, (err, result) => {
+        if (err) {
+            res.status(400).json({ error: err.message });
+            return;
+        }
+        res.json({
+            message: 'success',
+            data: body
+        });
+    });
+});
+
+// // <-- TEST CODE Create a candidate -->
 // const sql = `INSERT INTO candidates (id, first_name, last_name, industry_connected)
 //             VALUES (?,?,?,?)`;
 // const params = [1, 'Ronald', 'Firbank', 1];
