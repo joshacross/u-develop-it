@@ -33,16 +33,47 @@ const db = mysql.createConnection(
     console.log('Connected to the election database.')
 );
 
-/*
-// Return all the data in the candidates table
-// Runs a DB Query and executes callback with resulting rows that match the query
-db.query(`SELECT * FROM candidates`, (err, rows) => {
-    console.log(rows);
-})
-*/
+
+// Get all the data in the candidates table
+app.get('/api/candidates', (req, res) => {
+    const sql = `SELECT * FROM candidates`;
+
+    db.query(sql, (err, rows) => {
+        if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+        }
+        res.json({
+            message: 'Success!',
+            data: rows
+        });
+    });
+});
+
+// // <---Test Script to Run get all data in the candidates table ---> a runs a DB Query and executes callback with resulting rows that match the query
+// db.query(`SELECT * FROM candidates`, (err, rows) => {
+//     console.log(rows);
+// })
 
 
-// // GET a single candidate
+// GET a single candidate
+app.get('/api/candidate/:id', (req, res) => {
+    const sql = `SELECT * FROM candidates WHERE id = ?`;
+    const params = [req.params.id];
+
+    db.query(sql, params, (err, row) => {
+        if (err) {
+            res.status(400).json({ error: err.message });
+            return;
+        }
+        res.json({
+            message: 'success',
+            data: row
+        });
+    });
+});
+
+// // <--- Test Script to get a single candidate ---->
 // db.query(`SELECT * FROM candidates WHERE id = 1`, (err, row) => {
 //     if (err) {
 //         console.log(err);
