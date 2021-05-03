@@ -1,6 +1,15 @@
 # U-Develop-It
 
-# Description
+## Languages/Packages
+* Javascript
+* Node.js
+* Express.js
+* npm dependancies - Router, nodemon, jest
+* mySQL
+* Insomnia Core
+* mySQL workbench
+
+## Description
 U Develop It is the back-end development of a user voting application that allows the user to vote for several candidates and auto_increments unique ids totals votes per candidate and their respective party. This application uses a fully dedicated mySQL server that runs several SQL queries using node and express.JS and Create, Read, Update, and Delete methodologies. 
 
 * Database and table creation using mySQL Shell
