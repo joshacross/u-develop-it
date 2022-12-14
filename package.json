@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/joshacross/u-vote-it#readme",
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "mysql2": "^2.2.5",
     "nodemon": "^2.0.7"
   },
